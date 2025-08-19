@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
@@ -94,6 +94,10 @@
       background: #ddd;
       color: #555;
     }
+    .front.locked-blue {
+      background: #1976D2; /* un blau una mica diferent */
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -109,7 +113,7 @@
     <div class="card locked"><div class="inner"><div class="front">7 🔒</div><div class="back">Text del sobre 7</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">8 🔒</div><div class="back">Text del sobre 8</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">9 🔒</div><div class="back">Text del sobre 9</div></div></div>
-    <div class="card locked"><div class="inner"><div class="front blue">10 🔒</div><div class="back">Text del sobre 10</div></div></div>
+    <div class="card locked"><div class="inner"><div class="front locked-blue">10 🔒</div><div class="back">Text del sobre 10</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">11 🔒</div><div class="back">Text del sobre 11</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">12 🔒</div><div class="back">Text del sobre 12</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">13 🔒</div><div class="back">Text del sobre 13</div></div></div>
@@ -119,7 +123,7 @@
     <div class="card locked"><div class="inner"><div class="front">17 🔒</div><div class="back">Text del sobre 17</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">18 🔒</div><div class="back">Text del sobre 18</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">19 🔒</div><div class="back">Text del sobre 19</div></div></div>
-    <div class="card locked"><div class="inner"><div class="front blue">20 🔒</div><div class="back">Text del sobre 20</div></div></div>
+    <div class="card locked"><div class="inner"><div class="front locked-blue">20 🔒</div><div class="back">Text del sobre 20</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">21 🔒</div><div class="back">Text del sobre 21</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">22 🔒</div><div class="back">Text del sobre 22</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">23 🔒</div><div class="back">Text del sobre 23</div></div></div>
@@ -129,7 +133,7 @@
     <div class="card locked"><div class="inner"><div class="front">27 🔒</div><div class="back">Text del sobre 27</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">28 🔒</div><div class="back">Text del sobre 28</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">29 🔒</div><div class="back">Text del sobre 29</div></div></div>
-    <div class="card locked"><div class="inner"><div class="front blue">30 🔒</div><div class="back">Text del sobre 30</div></div></div>
+    <div class="card locked"><div class="inner"><div class="front locked-blue">30 🔒</div><div class="back">Text del sobre 30</div></div></div>
   </div>
 
   <script>
@@ -164,7 +168,7 @@
       card.addEventListener('click', () => {
         if(!card.classList.contains('locked') && card.classList.contains('flipped')) {
           const msg = document.createElement('div');
-          msg.textContent = "Bon dia! 🎉";
+          msg.textContent = "Mua?";
           msg.style.position = 'fixed';
           msg.style.top = '50%';
           msg.style.left = '50%';
