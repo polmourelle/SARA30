@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
@@ -98,6 +98,24 @@
       background: #1976D2; /* un blau una mica diferent */
       color: white;
     }
+    .back-button {
+      display: inline-block;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background: #4CAF50;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+      transition: background 0.3s;
+    }
+    .back-button:hover {
+      background: #45a049;
+    }
   </style>
 </head>
 <body>
@@ -188,5 +206,6 @@
       });
     });
   </script>
+<a href="index.html" class="back-button">Enrere</a>
 </body>
 </html>
