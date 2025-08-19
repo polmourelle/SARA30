@@ -2,8 +2,7 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
-  <title>La meva pàgina senzilla</title>
-  <!-- Importem una font de Google Fonts -->
+  <title>Sobres</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -13,75 +12,154 @@
       text-align: center;
       color: #222;
       min-height: 100vh;
-      /* Imatge de fons */
       background: url('jo.jpg') no-repeat center center fixed;
       background-size: cover;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
     h1 {
       margin-bottom: 2rem;
       color: white;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
     }
-    .finestra {
-      background: rgba(255,255,255,0.9);
-      border: 2px solid #333;
-      border-radius: 12px;
-      padding: 1rem;
-      margin: 1rem;
-      max-width: 400px;
-      cursor: pointer;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, background 0.3s ease;
+
+    /* contenidor en graella */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* cada sobre */
+    .card {
       perspective: 1000px;
+      cursor: pointer;
     }
-    .finestra strong {
-      font-size: 1.2rem;
+    .inner {
+      position: relative;
+      width: 100%;
+      padding-top: 100%; /* fa un quadrat */
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
     }
-    .contingut {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transform: rotateX(-90deg);
-      transform-origin: top;
-      transition: all 0.6s ease;
+    .card.flipped .inner {
+      transform: rotateY(180deg);
     }
-    .finestra.oberta {
-      background: rgba(255,255,255,1);
-      transform: scale(1.02);
+
+    .front, .back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
     }
-    .finestra.oberta .contingut {
-      max-height: 200px;
-      opacity: 1;
-      transform: rotateX(0deg);
-      margin-top: 1rem;
+    .front {
+      background: #fff8e1;
+      border: 2px solid #333;
+    }
+    .back {
+      background: #e1f5fe;
+      border: 2px solid #333;
+      transform: rotateY(180deg);
+      font-size: 1rem;
+      padding: 0.5rem;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Benvingut al meu projecte!</h1>
+  <h1>Sobres interactius</h1>
 
-  <div class="finestra" onclick="this.classList.toggle('oberta')">
-    <strong>Sobre el projecte</strong>
-    <div class="contingut">
-      Aquest és un projecte de programari lliure, fet per ser simple i accessible.
+  <div class="grid">
+    <!-- Generem 30 sobres -->
+    <!-- Cada card té un front (amb número) i un back (amb text) -->
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">1</div>
+        <div class="back">Text del sobre 1</div>
+      </div>
     </div>
-  </div>
 
-  <div class="finestra" onclick="this.classList.toggle('oberta')">
-    <strong>Com participar</strong>
-    <div class="contingut">
-      Pots contribuir enviant idees, comentaris o codi al nostre repositori.
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">2</div>
+        <div class="back">Text del sobre 2</div>
+      </div>
     </div>
-  </div>
 
-  <div class="finestra" onclick="this.classList.toggle('oberta')">
-    <strong>Contacte</strong>
-    <div class="contingut">
-      Escriu-nos a <em>projecte@exemple.org</em>.
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">3</div>
+        <div class="back">Text del sobre 3</div>
+      </div>
     </div>
+
+    <!-- ... repeteix fins al 30 -->
+    <!-- Et poso ràpidament tots els números amb text de mostra -->
+    <!-- Pots canviar el text del back lliurement -->
+    <!-- Copio per estalviar temps -->
+    <!-- 4 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">4</div><div class="back">Text del sobre 4</div></div></div>
+    <!-- 5 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">5</div><div class="back">Text del sobre 5</div></div></div>
+    <!-- 6 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">6</div><div class="back">Text del sobre 6</div></div></div>
+    <!-- 7 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">7</div><div class="back">Text del sobre 7</div></div></div>
+    <!-- 8 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">8</div><div class="back">Text del sobre 8</div></div></div>
+    <!-- 9 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">9</div><div class="back">Text del sobre 9</div></div></div>
+    <!-- 10 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">10</div><div class="back">Text del sobre 10</div></div></div>
+    <!-- 11 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">11</div><div class="back">Text del sobre 11</div></div></div>
+    <!-- 12 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">12</div><div class="back">Text del sobre 12</div></div></div>
+    <!-- 13 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">13</div><div class="back">Text del sobre 13</div></div></div>
+    <!-- 14 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">14</div><div class="back">Text del sobre 14</div></div></div>
+    <!-- 15 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">15</div><div class="back">Text del sobre 15</div></div></div>
+    <!-- 16 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">16</div><div class="back">Text del sobre 16</div></div></div>
+    <!-- 17 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">17</div><div class="back">Text del sobre 17</div></div></div>
+    <!-- 18 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">18</div><div class="back">Text del sobre 18</div></div></div>
+    <!-- 19 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">19</div><div class="back">Text del sobre 19</div></div></div>
+    <!-- 20 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">20</div><div class="back">Text del sobre 20</div></div></div>
+    <!-- 21 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">21</div><div class="back">Text del sobre 21</div></div></div>
+    <!-- 22 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">22</div><div class="back">Text del sobre 22</div></div></div>
+    <!-- 23 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">23</div><div class="back">Text del sobre 23</div></div></div>
+    <!-- 24 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">24</div><div class="back">Text del sobre 24</div></div></div>
+    <!-- 25 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">25</div><div class="back">Text del sobre 25</div></div></div>
+    <!-- 26 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">26</div><div class="back">Text del sobre 26</div></div></div>
+    <!-- 27 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">27</div><div class="back">Text del sobre 27</div></div></div>
+    <!-- 28 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">28</div><div class="back">Text del sobre 28</div></div></div>
+    <!-- 29 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">29</div><div class="back">Text del sobre 29</div></div></div>
+    <!-- 30 -->
+    <div class="card" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">30</div><div class="back">Text del sobre 30</div></div></div>
   </div>
 </body>
 </html>
