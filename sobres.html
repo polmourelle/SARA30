@@ -174,20 +174,20 @@
     cards.forEach((card, index) => {
       const front = card.querySelector('.front');
 
-      if(index <= diffDays && index < 30){
-        card.classList.remove('locked');
-        card.setAttribute('onclick','this.classList.toggle("flipped")');
-        front.textContent = index+1;
-
-        // animació de desbloqueig
-        card.style.transition = 'transform 0.5s, opacity 0.5s';
-        card.style.transform = 'scale(1.1)';
-        setTimeout(() => { card.style.transform = 'scale(1)'; }, 500);
-
-      } else if(index < 30){
-        card.classList.add('locked');
-        front.textContent = (index+1) + ' 🔒';
-      }
+if(index <= diffDays && index < 30){
+  card.classList.remove('locked');
+  card.setAttribute('onclick','this.classList.toggle("flipped")');
+  
+  // mantenim el text amb el número i evitem sobreescriure classes
+  const isBlue = front.classList.contains('blue') || front.classList.contains('locked-blue');
+  front.textContent = index+1; 
+  if(isBlue) front.classList.add('blue'); // assegurem que segueixi blau
+  
+  // animació de desbloqueig
+  card.style.transition = 'transform 0.5s, opacity 0.5s';
+  card.style.transform = 'scale(1.1)';
+  setTimeout(() => { card.style.transform = 'scale(1)'; }, 500);
+}
     });
 
     // Missatge emergent al girar un sobre
