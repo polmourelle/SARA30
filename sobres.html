@@ -1,8 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>30 regalets per la Sareta</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -19,13 +18,12 @@
 
     h1 {
       font-size: 4rem;
-      color: white;
+      color: white; /* o un color que contrastï amb el GIF */
       text-align: center;
       padding: 2rem;
-      background: url('flors.gif') center/cover no-repeat;
-      border-radius: 12px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
-      margin-bottom: 2rem;
+      background: url('flors.gif') center/cover no-repeat; /* GIF com a fons */
+      border-radius: 12px; /* opcional, per arrodonir els extrems */
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.5); /* millor llegibilitat */
     }
     
     .grid {
@@ -36,7 +34,11 @@
       margin: 0 auto;
     }
 
-    .card { perspective: 1000px; cursor: pointer; }
+    .card {
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
     .inner {
       position: relative;
       width: 100%;
@@ -44,111 +46,92 @@
       transform-style: preserve-3d;
       transition: transform 0.6s;
     }
-    .card.flipped .inner { transform: rotateY(180deg); }
+
+    .card.flipped .inner {
+      transform: rotateY(180deg);
+    }
 
     .front, .back {
-      position: absolute; inset: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       backface-visibility: hidden;
       border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
       box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-      border: 2px solid #333;
     }
 
     .front {
       background: #98fb98;
+      border: 2px solid #333;
       font-size: 1.5rem;
       color: white;
-      -webkit-text-stroke: 1px black; /* contorn números */
+      -webkit-text-stroke: 1px black;
     }
 
     .back {
       background: #e1f5fe;
+      border: 2px solid #333;
       transform: rotateY(180deg);
       font-size: 1rem;
       padding: 0.5rem;
       text-align: center;
     }
 
-    /* sobres blaus (marc daurat) */
-    .front.blue { background: #2196F3; color: white; border: 2px solid gold; }
-    .card.locked .front.locked-blue { background: #1976D2; color: black; border: 2px solid gold; }
+    .front.blue {
+      background: #2196F3; /* blau */
+      color: white;
+      border: 2px solid gold;
+    }
 
-    /* bloquejats */
-    .card.locked { cursor: not-allowed; }
-    .card.locked .inner { pointer-events: none; opacity: 0.8; }
-    .card.locked .front { background: #2e8b57; color: black; }
+    /* Sobres bloquejats */
+    .card.locked {
+      cursor: not-allowed;
+    }
+    .card.locked .inner {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    .card.locked .front {
+      background: #2e8b57;
+      color: black;
+    }
+    /* 🔹 Ara sobres bloquejats amb blau */
+    .card.locked .front.locked-blue {
+      background: #1976D2;
+      color: black;
+      border: 2px solid gold;
+    }
 
     .back-button {
-      display: inline-block; margin: 2rem auto; padding: 1rem 2rem;
-      background: #4CAF50; color: white; font-size: 1.2rem; font-weight: bold;
-      border: none; border-radius: 12px; cursor: pointer; text-decoration: none;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.3); transition: background 0.3s;
+      display: inline-block;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background: #4CAF50;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+      transition: background 0.3s;
     }
-    .back-button:hover { background: #45a049; }
-    
-/* Overlay per al sobre gran */
-.overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 2000;
-}
-
-.overlay.active {
-  display: flex;
-}
-
-.overlay .card {
-  width: 80vw;         /* 80% de l'ample de la pantalla */
-  height: 80vw;        /* sempre quadrat */
-  max-width: 400px;    /* no més gran de 400px */
-  max-height: 400px;   /* no més gran de 400px */
-  perspective: 1000px;
-}
-
-.overlay .inner {
-  width: 100%;
-  height: 100%;
-}
-
-.overlay .front, 
-.overlay .back {
-  font-size: 1.5rem;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-    .close-button {
-      margin-top: 1.5rem; padding: 1rem 2rem;
-      background: #4CAF50; color: white; font-size: 1.2rem; font-weight: bold;
-      border: none; border-radius: 12px; cursor: pointer; text-decoration: none;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.3); transition: background 0.3s;
-    }
-    .close-button:hover { background: #45a049; }
-
-    /* mòbil */
-    @media (max-width: 600px) {
-      h1 { font-size: 2.2rem; padding: 1rem; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 0.5rem; }
-      .front, .back { font-size: 1rem; }
-      .back-button { font-size: 1rem; padding: 0.8rem 1.5rem; }
+    .back-button:hover {
+      background: #45a049;
     }
   </style>
 </head>
 <body>
   <h1>30 regalets per la Sareta</h1>
-
   <div class="grid">
-    <!-- posa els teus 30 sobres; alguns amb 'locked-blue' per ser blaus des del principi -->
+    <!-- Exemple amb alguns sobres blaus bloquejats -->
     <div class="card locked"><div class="inner"><div class="front locked-blue">1 🔒</div><div class="back">Text del sobre 1</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">2 🔒</div><div class="back">Text del sobre 2</div></div></div>
     <div class="card locked"><div class="inner"><div class="front">3 🔒</div><div class="back">Text del sobre 3</div></div></div>
@@ -181,85 +164,60 @@
     <div class="card locked"><div class="inner"><div class="front locked-blue">30 🔒</div><div class="back">Text del sobre 30</div></div></div>
   </div>
 
-  <!-- Overlay -->
-  <div class="overlay" id="overlay">
-    <div class="card" id="bigCard">
-      <div class="inner">
-        <div class="front"></div>
-        <div class="back"></div>
-      </div>
-    </div>
-    <button class="close-button" onclick="closeOverlay()">Enrere</button>
-  </div>
-
   <script>
-    // --- referències overlay ---
-    const overlay = document.getElementById('overlay');
-    const bigCard = document.getElementById('bigCard');
-    const bigFront = bigCard.querySelector('.front');
-    const bigBack  = bigCard.querySelector('.back');
-
-    // --- desbloqueig per dies (normalitzant hores) ---
     const startDate = new Date('2025-08-18');
     const today = new Date();
     startDate.setHours(0,0,0,0);
     today.setHours(0,0,0,0);
-    const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    const diffTime = today - startDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    const cards = document.querySelectorAll('.grid .card');
+    const cards = document.querySelectorAll('.card');
 
     cards.forEach((card, index) => {
       const front = card.querySelector('.front');
 
-      if (index <= diffDays && index < 30) {
-        // desbloqueja
-        card.classList.remove('locked');
-        // conserva blau si venia com locked-blue
-        const wasBlue = front.classList.contains('blue') || front.classList.contains('locked-blue');
-        front.classList.remove('locked-blue');
-        front.textContent = index + 1;
-        if (wasBlue) front.classList.add('blue');
-
-        // clic = obrir overlay (no flip a la graella)
-        card.addEventListener('click', () => openOverlay(card));
-      } else {
-        // manté bloquejat
-        card.classList.add('locked');
-        front.textContent = (index + 1) + ' 🔒';
-      }
+if(index <= diffDays && index < 30){
+  card.classList.remove('locked');
+  card.setAttribute('onclick','this.classList.toggle("flipped")');
+  
+  // mantenim el text amb el número i evitem sobreescriure classes
+  const isBlue = front.classList.contains('blue') || front.classList.contains('locked-blue');
+  front.textContent = index+1; 
+  if(isBlue) front.classList.add('blue'); // assegurem que segueixi blau
+  
+  // animació de desbloqueig
+  card.style.transition = 'transform 0.5s, opacity 0.5s';
+  card.style.transform = 'scale(1.1)';
+  setTimeout(() => { card.style.transform = 'scale(1)'; }, 500);
+}
     });
 
-    function openOverlay(card) {
-      const smallFront = card.querySelector('.front');
-      const smallBack  = card.querySelector('.back');
+    // Missatge emergent al girar un sobre
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        if(!card.classList.contains('locked') && card.classList.contains('flipped')) {
+          const msg = document.createElement('div');
+          msg.textContent = "Mua?";
+          msg.style.position = 'fixed';
+          msg.style.top = '50%';
+          msg.style.left = '50%';
+          msg.style.transform = 'translate(-50%, -50%)';
+          msg.style.background = 'rgba(255,255,255,0.9)';
+          msg.style.padding = '1rem 2rem';
+          msg.style.borderRadius = '12px';
+          msg.style.boxShadow = '2px 2px 10px rgba(0,0,0,0.3)';
+          msg.style.fontSize = '1.5rem';
+          msg.style.zIndex = 1000;
+          document.body.appendChild(msg);
 
-      // reinicia classes base al sobre gran
-      bigFront.className = 'front';
-      bigBack.className  = 'back';
-
-      // copia contingut
-      bigFront.innerHTML = smallFront.innerHTML;
-      bigBack.innerHTML  = smallBack.innerHTML;
-
-      // si era blau, també el volem blau al gran
-      if (smallFront.classList.contains('blue') || smallFront.classList.contains('locked-blue')) {
-        bigFront.classList.add('blue');
-      }
-
-      overlay.classList.add('active');
-    }
-
-    // flip al sobre gran
-    bigCard.addEventListener('click', () => {
-      bigCard.classList.toggle('flipped');
+          setTimeout(() => {
+            msg.remove();
+          }, 2000);
+        }
+      });
     });
-
-    function closeOverlay(){
-      overlay.classList.remove('active');
-      bigCard.classList.remove('flipped');
-    }
   </script>
-
   <a href="index.html" class="back-button">Enrere</a>
 </body>
 </html>
