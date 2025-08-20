@@ -12,7 +12,7 @@
       text-align: center;
       color: #222;
       min-height: 100vh;
-      background: url('cdq.jpg') no-repeat center center fixed;
+      /*background: url('cdq.jpg') no-repeat center center fixed;*/
       background-size: cover;
     }
 
@@ -218,6 +218,23 @@ if(index <= diffDays && index < 30){
       });
     });
   </script>
+  <script>
+  // Llista d'imatges dins la carpeta Imatges
+  const images = [
+    'imatges/cdq.jpg',
+    'imatges/jo.jpg',
+    'imatges/tosasub.JPG'
+  ];
+
+  // Selecciona un índex aleatori
+  const randomIndex = Math.floor(Math.random() * images.length);
+
+  // Aplica la imatge com a fons
+  document.body.style.backgroundImage = `url('${images[randomIndex]}')`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+</script>
+
   <a href="index.html" class="back-button">Enrere</a>
 </body>
 </html>
