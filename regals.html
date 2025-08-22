@@ -21,11 +21,16 @@ h1 {
   color: white; 
   text-align: center;
   padding: 2rem;
-  background: url('imatges/flors.gif') center/cover no-repeat;
   border-radius: 12px;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
-  
-  /* 🔹 Assegurem que el GIF es vegi gran */
+
+  /* 🔹 GIF de fons només per al títol */
+  background-image: url('imatges/flors.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* 🔹 Que ocupi prou espai perquè el GIF es noti */
   min-height: 200px;
   display: flex;
   align-items: center;
