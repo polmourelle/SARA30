@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Broke de Bricks 🎮</title>
+  <title>🎮 Guanya per descobrir</title>
   <style>
     body {
       margin: 0;
@@ -93,7 +93,7 @@
   </style>
 </head>
 <body>
-  <h1>Broke de Bricks 🎮</h1>
+  <h1>🎮 Guanya per descobrir</h1>
   <button id="startButton">Iniciar</button>
   <canvas id="gameCanvas"></canvas>
 
@@ -229,7 +229,7 @@
               b.status = 0;
               score++;
               if (score === brickRowCount * brickColumnCount) {
-                alert("🎉 Has guanyat!");
+                alert("🎉 Has guanyat! Ara ves a /guanyat.html");
                 document.location.reload();
               }
             }
@@ -257,7 +257,7 @@
         else {
           lives--;
           if (!lives) {
-            alert("😢 Game Over");
+            alert("😢 Has perdut...");
             document.location.reload();
           } else {
             x = canvas.width / 2;
