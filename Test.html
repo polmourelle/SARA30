@@ -2,6 +2,7 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Broke de Bricks 🎮</title>
   <style>
     body {
@@ -9,25 +10,30 @@
       padding: 0;
       background: radial-gradient(circle at center, #111, #000);
       color: white;
-      text-align: center;
       font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
       overflow: hidden;
     }
 
     h1 {
-      margin-top: 1rem;
+      margin: 0.5rem;
+      font-size: 1.5rem;
+      text-align: center;
     }
 
     canvas {
       background: #222;
-      display: block;
-      margin: 1rem auto;
       border: 2px solid gold;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+      touch-action: none;
     }
 
-    button {
+    #startButton {
       background: #4CAF50;
       color: white;
       border: none;
@@ -36,12 +42,41 @@
       font-size: 1.2rem;
       font-weight: bold;
       cursor: pointer;
+      margin: 1rem;
       transition: background 0.3s;
       box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
     }
 
-    button:hover {
+    #startButton:hover {
       background: #45a049;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      position: absolute;
+      bottom: 20px;
+      gap: 2rem;
+    }
+
+    .control-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .control-btn:active {
+      background: #45a049;
+      transform: scale(0.9);
     }
 
     .signature {
@@ -60,7 +95,12 @@
 <body>
   <h1>Broke de Bricks 🎮</h1>
   <button id="startButton">Iniciar</button>
-  <canvas id="gameCanvas" width="480" height="320"></canvas>
+  <canvas id="gameCanvas"></canvas>
+
+  <div class="controls" id="controls">
+    <button id="leftBtn" class="control-btn">⬅️</button>
+    <button id="rightBtn" class="control-btn">➡️</button>
+  </div>
 
   <div class="signature">by Polet</div>
 
@@ -68,22 +108,28 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     const startButton = document.getElementById("startButton");
+    const leftBtn = document.getElementById("leftBtn");
+    const rightBtn = document.getElementById("rightBtn");
+
+    // Ajusta mida segons pantalla
+    function resizeCanvas() {
+      canvas.width = Math.min(window.innerWidth * 0.9, 400);
+      canvas.height = window.innerHeight * 0.6;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
 
     // Variables del joc
     let x, y, dx, dy, paddleX, rightPressed, leftPressed, bricks, score, lives, gameStarted;
-
-    const ballRadius = 8;
+    const ballRadius = 7;
     const paddleHeight = 10;
-    const paddleWidth = 75;
+    let paddleWidth = canvas.width * 0.25;
     const brickRowCount = 5;
-    const brickColumnCount = 7;
-    const brickWidth = 55;
-    const brickHeight = 20;
-    const brickPadding = 10;
+    const brickColumnCount = 5;
+    const brickPadding = 8;
     const brickOffsetTop = 30;
-    const brickOffsetLeft = 30;
+    const brickOffsetLeft = 20;
 
-    // Inicialitza tot
     function initGame() {
       x = canvas.width / 2;
       y = canvas.height - 30;
@@ -96,51 +142,47 @@
       lives = 3;
       gameStarted = true;
 
-      // Crear maons
+      const brickWidth = (canvas.width - (brickColumnCount - 1) * brickPadding - 2 * brickOffsetLeft) / brickColumnCount;
+      const brickHeight = 18;
+
       bricks = [];
       for (let c = 0; c < brickColumnCount; c++) {
         bricks[c] = [];
         for (let r = 0; r < brickRowCount; r++) {
-          bricks[c][r] = { x: 0, y: 0, status: 1 };
+          bricks[c][r] = { x: 0, y: 0, status: 1, width: brickWidth, height: brickHeight };
         }
       }
 
       draw();
     }
 
-    // Controls
-    document.addEventListener("keydown", keyDownHandler);
-    document.addEventListener("keyup", keyUpHandler);
-    document.addEventListener("mousemove", mouseMoveHandler);
+    // Controls tàctils
+    leftBtn.addEventListener("touchstart", () => (leftPressed = true));
+    leftBtn.addEventListener("touchend", () => (leftPressed = false));
+    rightBtn.addEventListener("touchstart", () => (rightPressed = true));
+    rightBtn.addEventListener("touchend", () => (rightPressed = false));
 
-    function keyDownHandler(e) {
-      if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
-      else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
-    }
+    // Controls de teclat
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowRight") rightPressed = true;
+      if (e.key === "ArrowLeft") leftPressed = true;
+    });
+    document.addEventListener("keyup", e => {
+      if (e.key === "ArrowRight") rightPressed = false;
+      if (e.key === "ArrowLeft") leftPressed = false;
+    });
 
-    function keyUpHandler(e) {
-      if (e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
-      else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
-    }
-
-    function mouseMoveHandler(e) {
-      const relativeX = e.clientX - canvas.offsetLeft;
-      if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
-      }
-    }
-
-    // Dibuixa maons
+    // Dibuix dels elements
     function drawBricks() {
       for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
           if (bricks[c][r].status === 1) {
-            const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-            const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+            const brickX = c * (bricks[c][r].width + brickPadding) + brickOffsetLeft;
+            const brickY = r * (bricks[c][r].height + brickPadding) + brickOffsetTop;
             bricks[c][r].x = brickX;
             bricks[c][r].y = brickY;
             ctx.beginPath();
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            ctx.rect(brickX, brickY, bricks[c][r].width, bricks[c][r].height);
             ctx.fillStyle = "limegreen";
             ctx.fill();
             ctx.closePath();
@@ -149,16 +191,14 @@
       }
     }
 
-    // Dibuixa la pilota
     function drawBall() {
       ctx.beginPath();
       ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "#FFD700";
+      ctx.fillStyle = "gold";
       ctx.fill();
       ctx.closePath();
     }
 
-    // Dibuixa la pala
     function drawPaddle() {
       ctx.beginPath();
       ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
@@ -167,31 +207,29 @@
       ctx.closePath();
     }
 
-    // Dibuixa puntuació i vides
     function drawScore() {
-      ctx.font = "16px Arial";
+      ctx.font = "14px Arial";
       ctx.fillStyle = "#fff";
       ctx.fillText("Punts: " + score, 8, 20);
     }
 
     function drawLives() {
-      ctx.font = "16px Arial";
+      ctx.font = "14px Arial";
       ctx.fillStyle = "#fff";
-      ctx.fillText("Vides: " + lives, canvas.width - 80, 20);
+      ctx.fillText("Vides: " + lives, canvas.width - 70, 20);
     }
 
-    // Col·lisions amb els maons
     function collisionDetection() {
       for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
           const b = bricks[c][r];
           if (b.status === 1) {
-            if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+            if (x > b.x && x < b.x + b.width && y > b.y && y < b.y + b.height) {
               dy = -dy;
               b.status = 0;
               score++;
               if (score === brickRowCount * brickColumnCount) {
-                alert("🎉 Has guanyat! Felicitats!");
+                alert("🎉 Has guanyat!");
                 document.location.reload();
               }
             }
@@ -200,7 +238,6 @@
       }
     }
 
-    // Funció principal
     function draw() {
       if (!gameStarted) return;
 
@@ -212,7 +249,7 @@
       drawLives();
       collisionDetection();
 
-      // Rebot de parets
+      // Rebots
       if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
       if (y + dy < ballRadius) dy = -dy;
       else if (y + dy > canvas.height - ballRadius - paddleHeight - 10) {
@@ -233,17 +270,16 @@
       }
 
       // Mou la pala
-      if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 7;
-      else if (leftPressed && paddleX > 0) paddleX -= 7;
+      const paddleSpeed = 5;
+      if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += paddleSpeed;
+      else if (leftPressed && paddleX > 0) paddleX -= paddleSpeed;
 
-      // Mou la pilota
       x += dx;
       y += dy;
 
       requestAnimationFrame(draw);
     }
 
-    // Botó iniciar
     startButton.addEventListener("click", () => {
       startButton.style.display = "none";
       initGame();
