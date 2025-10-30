@@ -5,180 +5,181 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Era broma! Supera aquest i ho descobriràs</title>
   <style>
-    :root{
+    :root {
       --bg: #0f1724;
       --card-back: #1e293b;
       --accent: #4caf50;
       --card-size: min(18vw, 90px);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
       color: blue;
-      flex-direction:column;
-      align-items:center;
+      flex-direction: column;
+      align-items: center;
       background: radial-gradient(circle at 10% 10%, #10202b 0%, var(--bg) 40%);
-      color:#e6eef6;
+      color: #e6eef6;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      padding:1rem;
+      padding: 1rem;
     }
 
-    header{
-      width:100%;
-      max-width:1000px;
-      display:flex;
-      gap:1rem;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:0.5rem;
+    header {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
     }
-    h1{margin:0;font-size:1.2rem;letter-spacing:0.02em}
-    .controls{
-      display:flex;
-      gap:.5rem;
-      align-items:center;
+    h1 { margin: 0; font-size: 1.2rem; letter-spacing: 0.02em; }
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
     }
-    button{
-      background:var(--accent);
-      color:#fff;
-      border:none;
-      padding:.55rem .9rem;
-      border-radius:10px;
-      font-weight:600;
-      cursor:pointer;
-      box-shadow:0 4px 12px rgba(0,0,0,0.35);
-      transition:transform .08s ease, opacity .12s;
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.55rem 0.9rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      transition: transform .08s ease, opacity .12s;
     }
-    button:active{transform:scale(.98)}
-    .small{padding:.35rem .6rem;font-size:.95rem}
+    button:active { transform: scale(.98); }
+    .small { padding: .35rem .6rem; font-size: .95rem; }
 
-    /* area del joc */
-    .board-wrap{
-      width:100%;
-      max-width:1000px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:1rem;
-    }
-
-    .status{
-      display:flex;
-      gap:1rem;
-      align-items:center;
-      font-size:0.95rem;
-      color:#dbeafe;
+    /* Àrea del joc */
+    .board-wrap {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
     }
 
-    /* grid cartes */
-    .board{
-      width:100%;
-      display:grid;
+    .status {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-size: 0.95rem;
+      color: #dbeafe;
+    }
+
+    /* Grid cartes */
+    .board {
+      width: 100%;
+      display: grid;
       gap: .7rem;
-      justify-items:center;
-      align-items:center;
-      /* default 4x4 (modifica la variable card-size si cal) */
+      justify-items: center;
+      align-items: center;
       grid-template-columns: repeat(4, 1fr);
-      max-width:720px;
-      margin:0 auto;
+      max-width: 720px;
+      margin: 0 auto;
       padding: .5rem;
     }
 
-    /* targeta */
-    .card{
+    /* Targeta */
+    .card {
       width: var(--card-size);
       height: var(--card-size);
       perspective: 900px;
       cursor: pointer;
-      position:relative;
+      position: relative;
     }
-    .card.locked { cursor: default; opacity:.95 }
-    .flip-inner{
-      position:absolute;
-      inset:0;
+    .card.locked { cursor: default; opacity: .95; }
+    .flip-inner {
+      position: absolute;
+      inset: 0;
       transition: transform .55s cubic-bezier(.2,.9,.3,1);
-      transform-style:preserve-3d;
+      transform-style: preserve-3d;
     }
-    .card.flipped .flip-inner{ transform: rotateY(180deg); }
+    .card.flipped .flip-inner { transform: rotateY(180deg); }
 
-    .face{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:8px;
-      -webkit-backface-visibility: hidden;
+    .face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
       backface-visibility: hidden;
       font-size: calc(var(--card-size) * 0.45);
-      user-select:none;
+      user-select: none;
       box-shadow: 0 6px 12px rgba(2,6,23,0.6);
     }
 
-    .front{
-      background: linear-gradient(180deg,#fff,#e6f7ff);
-      color:#0b1220;
+    .front {
+      background: #fff;
       transform: rotateY(180deg);
       border: 3px solid rgba(0,0,0,0.12);
+      overflow: hidden;
     }
-    .back{
-      background: linear-gradient(180deg,var(--card-back),#0f1724);
+
+    .front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .back {
+      background: linear-gradient(180deg, var(--card-back), #0f1724);
       color: #cfe9ff;
       border: 2px dashed rgba(255,255,255,0.03);
       font-size: calc(var(--card-size) * 0.32);
     }
 
-    /* parella trobada */
-    .card.matched .front{
+    .card.matched .front {
       box-shadow: 0 8px 18px rgba(74,197,150,0.15);
       outline: 3px solid rgba(255,215,0,0.08);
     }
 
-    /* popup personalitzat (substitueix alert) */
+    /* Popup personalitzat */
     .popup {
       position: fixed;
-      left:50%;
-      top:50%;
+      left: 50%;
+      top: 50%;
       transform: translate(-50%, -50%) scale(.98);
-      background: linear-gradient(180deg,#062e1f,#083926);
+      background: linear-gradient(180deg, #062e1f, #083926);
       color: #eafff0;
       padding: 1.4rem 1.6rem;
       border-radius: 12px;
       box-shadow: 0 20px 50px rgba(2,6,23,0.7);
       z-index: 9999;
       display: none;
-      text-align:center;
-      min-width:220px;
+      text-align: center;
+      min-width: 220px;
     }
-    .popup.show{ display:block; animation: popupIn .18s ease forwards; }
-    @keyframes popupIn {
-      to{ transform: translate(-50%,-50%) scale(1); }
-    }
-    .overlay-dim{ position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9998; display:none;}
-    .overlay-dim.show{display:block}
+    .popup.show { display: block; animation: popupIn .18s ease forwards; }
+    @keyframes popupIn { to { transform: translate(-50%, -50%) scale(1); } }
+    .overlay-dim { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9998; display: none; }
+    .overlay-dim.show { display: block; }
 
-    /* signature bottom-right */
-    .signature{
-      position:fixed;
-      right:12px;
-      bottom:8px;
-      color:#fff;
-      font-style:italic;
-      font-size:.9rem;
+    .signature {
+      position: fixed;
+      right: 12px;
+      bottom: 8px;
+      color: #fff;
+      font-style: italic;
+      font-size: .9rem;
       text-shadow: 0 1px 2px rgba(0,0,0,0.8);
       z-index: 10000;
     }
 
-    /* responsive: ajusta columnes i mida targeta */
-    @media (max-width:700px){
-      .board{ grid-template-columns: repeat(4, 1fr); }
-      :root{ --card-size: min(18vw, 84px); }
+    @media (max-width: 700px) {
+      .board { grid-template-columns: repeat(4, 1fr); }
+      :root { --card-size: min(18vw, 84px); }
     }
-    @media (max-width:420px){
-      .board{ grid-template-columns: repeat(3, 1fr); }
-      :root{ --card-size: min(24vw, 86px); }
+    @media (max-width: 420px) {
+      .board { grid-template-columns: repeat(3, 1fr); }
+      :root { --card-size: min(24vw, 86px); }
     }
   </style>
 </head>
@@ -200,7 +201,6 @@
     <div class="board" id="board" aria-live="polite"></div>
   </main>
 
-  <!-- popup -->
   <div class="overlay-dim" id="dim"></div>
   <div class="popup" id="popup">
     <div id="popupText">Has guanyat!</div>
@@ -213,20 +213,21 @@
   <div class="signature">by Polet</div>
 
 <script>
-/* ---------- CONTINGUT I CONFIGURACIÓ ---------- */
-/* Pins: pots canviar els símbols per imatges si prefereixes */
-const symbols = ['imatges/1.jpg','imatges/2.jpg','3.jpg','🍓','🍒','🍍','🥝','🍉','🥥','🍑','🍋','🍊'];
-// nombre parelles per partida (per defecte 8 parelles = 16 cartes)
+/* ---------- CONFIGURACIÓ ---------- */
+const imagePaths = [
+  'imatges/1.jpg', 'imatges/2.jpg', 'imatges/3.jpg', 'imatges/4.jpg',
+  'imatges/5.jpg', 'imatges/6.jpg', 'imatges/7.jpg', 'imatges/8.jpg'
+];
 let pairsCount = 8;
 
-/* ---------- ESTAT DEL JOC ---------- */
+/* ---------- ESTAT ---------- */
 let firstCard = null;
 let secondCard = null;
 let lockBoard = false;
 let foundPairs = 0;
 let moves = 0;
 
-/* ---------- DOM refs ---------- */
+/* ---------- DOM ---------- */
 const board = document.getElementById('board');
 const foundEl = document.getElementById('found');
 const totalPairsEl = document.getElementById('totalPairs');
@@ -236,10 +237,9 @@ const dim = document.getElementById('dim');
 
 totalPairsEl.textContent = pairsCount;
 
-/* ---------- UTILS ---------- */
-function shuffle(array){
+function shuffle(array) {
   let current = array.length, temp, rand;
-  while (current){
+  while (current) {
     rand = Math.floor(Math.random() * current--);
     temp = array[current];
     array[current] = array[rand];
@@ -248,154 +248,95 @@ function shuffle(array){
   return array;
 }
 
-/* Crea un mazo amb parellesCount parelles (duplica i barrega) */
-function buildDeck(pairs){
-  const chosen = symbols.slice(0); // copia
+function buildDeck(pairs) {
+  const chosen = imagePaths.slice(0);
   shuffle(chosen);
-  const deck = chosen.slice(0,pairs).flatMap(s => [s,s]);
+  const deck = chosen.slice(0, pairs).flatMap(s => [s, s]);
   return shuffle(deck);
 }
 
-/* ---------- RENDER I LÒGICA ---------- */
-function createBoard(pairs){
+function createBoard(pairs) {
   board.innerHTML = '';
   firstCard = null; secondCard = null; lockBoard = false;
   foundPairs = 0; moves = 0; updateStatus();
 
   const deck = buildDeck(pairs);
-  deck.forEach((symbol, idx) => {
+  deck.forEach((imgSrc) => {
     const card = document.createElement('button');
     card.className = 'card';
-    card.setAttribute('data-symbol', symbol);
-    card.setAttribute('aria-label','Carta');
+    card.dataset.symbol = imgSrc;
     card.innerHTML = `
       <div class="flip-inner">
         <div class="face back"></div>
-        <div class="face front">${symbol}</div>
+        <div class="face front"><img src="${imgSrc}" alt="imatge"></div>
       </div>
     `;
-    // event listeners (touch + click)
     card.addEventListener('click', onCardClick);
-    card.addEventListener('touchstart', onCardClick, {passive:true});
     board.appendChild(card);
   });
 }
 
-/* actualitzar elements d'estat */
-function updateStatus(){
+function updateStatus() {
   foundEl.textContent = foundPairs;
   movesEl.textContent = 'Moviments: ' + moves;
 }
 
-/* gestionar clic sobre una carta */
-function onCardClick(e){
+function onCardClick(e) {
   const card = e.currentTarget;
   if (lockBoard) return;
   if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
   flipCard(card);
 
-  if (!firstCard){
+  if (!firstCard) {
     firstCard = card;
     return;
   }
   secondCard = card;
   moves++; updateStatus();
 
-  // comprova coincidència
-  const a = firstCard.getAttribute('data-symbol');
-  const b = secondCard.getAttribute('data-symbol');
+  const a = firstCard.dataset.symbol;
+  const b = secondCard.dataset.symbol;
 
-  if (a === b){
-    // match
+  if (a === b) {
     firstCard.classList.add('matched');
     secondCard.classList.add('matched');
     foundPairs++;
     resetTurn();
-    if (foundPairs === pairsCount){
-      setTimeout(() => showWin(), 400);
-    }
+    if (foundPairs === pairsCount) setTimeout(showWin, 400);
   } else {
-    // no match: gira enrere amb retard
     lockBoard = true;
     setTimeout(() => {
       unflipCard(firstCard);
       unflipCard(secondCard);
       resetTurn();
-    }, 700);
+    }, 800);
   }
 }
 
-/* volta una carta (afegir classe) */
-function flipCard(card){
-  card.classList.add('flipped');
-  // accessibilitat: marcar aria-pressed
-  card.setAttribute('aria-pressed','true');
-}
+function flipCard(card) { card.classList.add('flipped'); }
+function unflipCard(card) { card.classList.remove('flipped'); }
+function resetTurn() { [firstCard, secondCard] = [null, null]; lockBoard = false; updateStatus(); }
 
-/* gira enrere */
-function unflipCard(card){
-  card.classList.remove('flipped');
-  card.setAttribute('aria-pressed','false');
-}
+document.getElementById('newBtn').addEventListener('click', () => createBoard(pairsCount));
+document.getElementById('shuffleBtn').addEventListener('click', () => createBoard(pairsCount));
 
-/* reiniciar variables del torn */
-function resetTurn(){
-  [firstCard, secondCard] = [null, null];
-  lockBoard = false;
-  updateStatus();
-}
-
-/* ---------- BOTONS I POPUP ---------- */
-document.getElementById('newBtn').addEventListener('click', () => {
-  createBoard(pairsCount);
-});
-document.getElementById('shuffleBtn').addEventListener('click', () => {
-  // barrejada visual: recreem tauler
-  createBoard(pairsCount);
-  // efecte ràpid: fent un petit delay i mostrant breument les cartes
-  revealAll(450);
-});
-
-/* mostra totes les cartes breument (demo) */
-function revealAll(duration = 600){
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(c => c.classList.add('flipped'));
-  setTimeout(() => {
-    cards.forEach(c => {
-      if (!c.classList.contains('matched')) c.classList.remove('flipped');
-    });
-  }, duration);
-}
-
-/* popup show / close */
-function showPopup(text){
+function showPopup(text) {
   document.getElementById('popupText').textContent = text;
   dim.classList.add('show');
   popup.classList.add('show');
 }
-function closePopup(){
+function closePopup() {
   popup.classList.remove('show');
   dim.classList.remove('show');
 }
-
-/* win handler */
-function showWin(){
+function showWin() {
   showPopup(`🎉 Ets tant la millor! Mua? Ara ves a /ara_si.html`);
 }
-
-/* play again button */
-document.getElementById('playAgain').addEventListener('click', () => {
-  closePopup();
-  createBoard(pairsCount);
-});
+document.getElementById('playAgain').addEventListener('click', () => { closePopup(); createBoard(pairsCount); });
 document.getElementById('closePopup').addEventListener('click', closePopup);
 
-/* ---------- INICI AUTOMÀTIC I ACCESSIBILITAT ---------- */
 createBoard(pairsCount);
-
-/* Millora UX mòbil: evitar scroll quan es toquen cartes */
-document.addEventListener('touchmove', function(e){ if (e.target.closest('.card')) e.preventDefault(); }, {passive:false});
 </script>
 </body>
 </html>
