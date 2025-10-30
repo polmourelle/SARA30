@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Memory — Joc de Parelles</title>
+  <title>Era broma! Supera aquest i ho descobriras</title>
   <style>
     :root{
       --bg: #0f1724;
@@ -16,6 +16,7 @@
       margin:0;
       min-height:100vh;
       display:flex;
+      color: blue;
       flex-direction:column;
       align-items:center;
       background: radial-gradient(circle at 10% 10%, #10202b 0%, var(--bg) 40%);
@@ -183,7 +184,7 @@
 </head>
 <body>
   <header>
-    <h1>Memory — Troba les parelles</h1>
+    <h1>Era broma! Supera aquest i ho descobriras</h1>
     <div class="controls">
       <button id="newBtn" class="small">Reinicia</button>
       <button id="shuffleBtn" class="small">Barreja</button>
@@ -209,12 +210,12 @@
     </div>
   </div>
 
-  <div class="signature">by Pol M.</div>
+  <div class="signature">by Polet</div>
 
 <script>
 /* ---------- CONTINGUT I CONFIGURACIÓ ---------- */
 /* Pins: pots canviar els símbols per imatges si prefereixes */
-const symbols = ['🍎','🍌','🍇','🍓','🍒','🍍','🥝','🍉','🥥','🍑','🍋','🍊'];
+const symbols = ['1.jpg','2.jpg','3.jpg','🍓','🍒','🍍','🥝','🍉','🥥','🍑','🍋','🍊'];
 // nombre parelles per partida (per defecte 8 parelles = 16 cartes)
 let pairsCount = 8;
 
@@ -380,7 +381,7 @@ function closePopup(){
 
 /* win handler */
 function showWin(){
-  showPopup(`🎉 Has trobat totes les parelles en ${moves} moviments!`);
+  showPopup(`🎉 Ets tant la millor! Mua? Ara ves a /ara_si.html`);
 }
 
 /* play again button */
