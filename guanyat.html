@@ -63,6 +63,12 @@
       align-items:center;
       gap:1rem;
     }
+.card imatge {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+}
 
     .status{
       display:flex;
@@ -271,7 +277,7 @@ function createBoard(pairs){
     card.innerHTML = `
       <div class="flip-inner">
         <div class="face back"></div>
-        <div class="face front">${symbol}</div>
+        <div class="face front"><imatge src="${symbol}" alt="imatge"</div>
       </div>
     `;
     // event listeners (touch + click)
