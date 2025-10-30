@@ -1,468 +1,167 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ara si, últim joc</title>
-<style>
-  :root{
-    --bg: #0b1220;
-    --panel: #0f1724;
-    --accent: #4caf50;
-    --muted: #9aa6b2;
-    --cell-size: min(20vw, 86px);
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    background: linear-gradient(180deg,#07111a,#0b1220);
-    color:#e6eef6;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    padding:1rem;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3 en Ratlla - Mode 3 Fitxes</title>
+  <style>
+    body {
+      font-family: 'Roboto Slab', serif;
+      background: radial-gradient(circle at center, #0f1724, #020617);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-  header{
-    width:100%;
-    max-width:720px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:1rem;
-    margin-bottom:1rem;
-  }
-  h1{margin:0;font-size:1.2rem}
-  .controls{display:flex; gap:.5rem; align-items:center;}
-  .btn{
-    background:var(--accent);
-    color:#fff;
-    border:none;
-    padding:.5rem .75rem;
-    border-radius:8px;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 6px 14px rgba(0,0,0,0.45);
-  }
-  .btn.alt{ background:#2b3942; color:#e6eef6; border:1px solid rgba(255,255,255,0.04); }
-  .small{ padding:.35rem .6rem; font-size:.95rem }
+    h1 {
+      margin-bottom: 1rem;
+      text-shadow: 0 0 8px #4caf50;
+    }
 
-  .panel{
-    width:100%;
-    max-width:520px;
-    background: linear-gradient(180deg,#07121a,#0f1724);
-    border-radius:12px;
-    padding:1rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    display:flex;
-    flex-direction:column;
-    gap:1rem;
-    align-items:center;
-  }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 8px;
+    }
 
-  .options{
-    display:flex;
-    gap:.5rem;
-    align-items:center;
-    flex-wrap:wrap;
-  }
+    .cell {
+      background: #1e293b;
+      border: 2px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-  .board{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: .6rem;
-    width: calc(3 * var(--cell-size) + 2 * .6rem);
-    max-width:100%;
-  }
+    .cell:hover {
+      background: #334155;
+    }
 
-  .cell{
-    width: var(--cell-size);
-    height: var(--cell-size);
-    background: linear-gradient(180deg,#12202a,#09121a);
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size: calc(var(--cell-size) * 0.6);
-    color:#e7f7ff;
-    user-select:none;
-    cursor:pointer;
-    box-shadow: 0 8px 18px rgba(2,6,23,0.6);
-    transition: transform .08s, box-shadow .12s;
-  }
-  .cell:active{ transform: scale(.98); }
-  .cell.disabled{ cursor: default; opacity: .95; }
-  .cell.x{ color:#ffdd57; }   /* X color */
-  .cell.o{ color:#66ffd6; }   /* O color */
+    .cell.taken {
+      cursor: default;
+    }
 
-  .line-win {
-    outline: 4px solid rgba(255,215,0,0.12);
-    box-shadow: 0 10px 30px rgba(255,215,0,0.06);
-  }
+    #status {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+    }
 
-  .status{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:1rem;
-  }
-  .status .text{ color:var(--muted); font-size:.98rem; }
+    button {
+      margin-top: 1rem;
+      background: #4caf50;
+      border: none;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-  /* popup */
-  .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:999; }
-  .overlay.show{ display:flex; }
-  .dim{ position:absolute; inset:0; background:rgba(0,0,0,0.6); }
-  .modal{
-    position:relative;
-    background: linear-gradient(180deg,#05251a,#06322a);
-    color:#eafff0;
-    padding:1.2rem 1.4rem;
-    border-radius:12px;
-    z-index:1000;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-    text-align:center;
-    min-width:240px;
-  }
-  .modal .actions{ margin-top:0.8rem; display:flex; gap:.5rem; justify-content:center; }
-
-  .signature{
-    position:fixed; right:12px; bottom:8px;
-    color:#fff; font-style:italic; font-size:.9rem; z-index:10001;
-    text-shadow:0 1px 2px rgba(0,0,0,0.7);
-  }
-
-  /* responsive */
-  @media (max-width:480px){
-    :root{ --cell-size: min(24vw, 86px); }
-    .panel{ padding:.8rem; gap:.6rem; }
-    h1{ font-size:1rem }
-  }
-</style>
+    button:hover {
+      background: #43a047;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Ara sí, últim joc</h1>
-    <div class="controls">
-      <button class="btn small" id="restartBtn">Reinicia</button>
-      <button class="btn alt small" id="whoBtn">Tu comences</button>
-    </div>
-  </header>
+  <h1>3 en Ratlla (Només 3 fitxes)</h1>
+  <div class="board" id="board"></div>
+  <div id="status">Torn del jugador: <span id="player">X</span></div>
+  <button id="resetBtn">Reinicia</button>
 
-  <main class="panel" role="main" aria-label="Joc de 3 en ratlla">
-    <div class="status">
-      <div class="text" id="info">És el teu torn — X</div>
-      <div>
-        <span class="text">Punts: </span>
-        <strong id="scoreMe">0</strong> · <span class="text">IA:</span> <strong id="scoreAI">0</strong>
-      </div>
-    </div>
+  <script>
+    const board = document.getElementById("board");
+    const statusText = document.getElementById("status");
+    const playerText = document.getElementById("player");
+    const resetBtn = document.getElementById("resetBtn");
 
-    <div class="board" id="board" role="grid" aria-label="Taulell 3x3">
-      <!-- 9 cel·les afegides via JS -->
-    </div>
+    let cells = Array(9).fill("");
+    let currentPlayer = "X";
+    let xMoves = [];
+    let oMoves = [];
+    let gameOver = false;
 
-    <div style="font-size:.9rem;color:var(--muted);text-align:center">
-      Toca una casella per jugar. L'IA juga automàticament.
-    </div>
-  </main>
-
-  <div class="signature">by Pol M.</div>
-
-  <!-- popup -->
-  <div class="overlay" id="overlay">
-    <div class="dim" id="dim"></div>
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div id="modalTitle" style="font-weight:700;font-size:1.05rem">Partida finalitzada</div>
-      <div id="modalMsg" style="margin-top:.6rem">Has guanyat!</div>
-      <div class="actions">
-        <button class="btn" id="playAgain">Juga una altra</button>
-        <button class="btn alt" id="closeModal">Tanca</button>
-      </div>
-    </div>
-  </div>
-
-<script>
-/*
-  3 en ratlla vs IA (minimax)
-  X = jugador humà
-  O = IA
-*/
-
-const boardEl = document.getElementById('board');
-const infoEl = document.getElementById('info');
-const overlay = document.getElementById('overlay');
-const modalMsg = document.getElementById('modalMsg');
-const playAgain = document.getElementById('playAgain');
-const closeModal = document.getElementById('closeModal');
-const restartBtn = document.getElementById('restartBtn');
-const whoBtn = document.getElementById('whoBtn');
-const scoreMeEl = document.getElementById('scoreMe');
-const scoreAIEl = document.getElementById('scoreAI');
-
-let board; // array 9: '', 'X', 'O'
-let human = 'X';
-let ai = 'O';
-let humanStarts = true;
-let gameOver = false;
-let score = { me: 0, ai: 0 };
-
-// winning combos
-const wins = [
-  [0,1,2],[3,4,5],[6,7,8],
-  [0,3,6],[1,4,7],[2,5,8],
-  [0,4,8],[2,4,6]
-];
-
-// create cells
-function buildBoard(){
-  boardEl.innerHTML = '';
-  for(let i=0;i<9;i++){
-    const c = document.createElement('button');
-    c.className = 'cell';
-    c.setAttribute('data-i', i);
-    c.setAttribute('aria-label', 'Casella ' + (i+1));
-    c.addEventListener('click', onCellClick);
-    c.addEventListener('touchstart', onCellClick, {passive:true});
-    boardEl.appendChild(c);
-  }
-}
-
-// start new game
-function newGame(startHuman = true){
-  board = Array(9).fill('');
-  gameOver = false;
-  humanStarts = startHuman;
-  human = 'X'; ai = 'O';
-  updateWhoBtn();
-  renderBoard();
-
-  if(!humanStarts){
-    infoEl.textContent = "Toc d'IA — pensa...";
-    setTimeout(() => aiMove(), 350);
-  } else {
-    infoEl.textContent = "És el teu torn — " + human;
-  }
-}
-
-// render board to DOM
-function renderBoard(){
-  const cells = boardEl.querySelectorAll('.cell');
-  cells.forEach((cell, idx) => {
-    const v = board[idx];
-    cell.classList.remove('x','o','line-win','disabled');
-    cell.innerHTML = v ? `<span class="${v==='X' ? 'x' : 'o'}">${v}</span>` : '';
-    if(v) cell.classList.add(v==='X' ? 'x' : 'o', 'disabled');
-  });
-}
-
-// click handler
-function onCellClick(e){
-  if(gameOver) return;
-  const idx = Number(e.currentTarget.dataset.i);
-  if(board[idx]) return;
-  // only allow human move if it's human's turn
-  if(!isHumanTurn()) return;
-  makeMove(idx, human);
-  renderBoard();
-  postMove();
-}
-
-// check whose turn
-function isHumanTurn(){
-  const movesCount = board.filter(Boolean).length;
-  // human plays X always. If humanStarts true, human moves on even counts (0,2,...)
-  if(humanStarts) return movesCount % 2 === 0;
-  else return movesCount % 2 === 1;
-}
-
-// place move
-function makeMove(idx, player){
-  if(board[idx] || gameOver) return;
-  board[idx] = player;
-  renderBoard();
-}
-
-// after a move: check result or AI move
-function postMove(){
-  const winner = checkWinner(board);
-  if(winner){
-    finishGame(winner);
-    return;
-  }
-  if(board.every(Boolean)){
-    finishGame('draw');
-    return;
-  }
-  // if now it's AI's turn, make AI move
-  if(!isHumanTurn()){
-    infoEl.textContent = "Toc d'IA — pensa...";
-    setTimeout(() => aiMove(), 300);
-  } else {
-    infoEl.textContent = "És el teu torn — " + human;
-  }
-}
-
-// check winner returns 'X' or 'O' or null
-function checkWinner(bd){
-  for(const line of wins){
-    const [a,b,c] = line;
-    if(bd[a] && bd[a] === bd[b] && bd[a] === bd[c]) return bd[a];
-  }
-  return null;
-}
-
-// highlight winning line
-function highlightWin(player){
-  for(const line of wins){
-    const [a,b,c] = line;
-    if(board[a] && board[a] === board[b] && board[a] === board[c]){
-      // add classes to those cells
-      [a,b,c].forEach(i => {
-        const el = boardEl.querySelector(`[data-i="${i}"]`);
-        if(el) el.classList.add('line-win');
+    function createBoard() {
+      board.innerHTML = "";
+      cells.forEach((_, i) => {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+        cell.addEventListener("click", handleClick);
+        board.appendChild(cell);
       });
-      break;
-    }
-  }
-}
-
-// finish game
-function finishGame(result){
-  gameOver = true;
-  if(result === 'draw'){
-    modalMsg.textContent = 'Empat!';
-    infoEl.textContent = 'Empat!';
-    showModal();
-  } else {
-    highlightWin(result);
-    if(result === human){
-      modalMsg.textContent = '🎉 Has guanyat!';
-      infoEl.textContent = 'Has guanyat!';
-      score.me++;
-      scoreMeEl.textContent = score.me;
-    } else {
-      modalMsg.textContent = 'Oh… L\'IA ha guanyat';
-      infoEl.textContent = 'L\'IA ha guanyat';
-      score.ai++;
-      scoreAIEl.textContent = score.ai;
-    }
-    showModal();
-  }
-}
-
-// show popup
-function showModal(){
-  overlay.classList.add('show');
-}
-
-// hide popup
-function hideModal(){
-  overlay.classList.remove('show');
-}
-
-// AI move using minimax
-function aiMove(){
-  if(gameOver) return;
-  // compute best move
-  const best = minimax(board, ai);
-  makeMove(best.index, ai);
-  postMove();
-}
-
-// minimax algorithm
-function minimax(newBoard, player){
-  // available spots
-  const avail = newBoard.map((v,i)=> v ? null : i).filter(v=>v !== null);
-
-  // check terminal states
-  const winner = checkWinner(newBoard);
-  if(winner === human) return {score: -10};
-  if(winner === ai) return {score: 10};
-  if(avail.length === 0) return {score: 0};
-
-  const moves = [];
-
-  for(let i=0;i<avail.length;i++){
-    const idx = avail[i];
-    const move = {};
-    move.index = idx;
-    // simulate
-    newBoard[idx] = player;
-
-    if(player === ai){
-      const result = minimax(newBoard, human);
-      move.score = result.score;
-    } else {
-      const result = minimax(newBoard, ai);
-      move.score = result.score;
     }
 
-    // undo
-    newBoard[idx] = '';
-    moves.push(move);
-  }
+    function handleClick(e) {
+      const index = e.target.dataset.index;
+      if (gameOver || cells[index] !== "") return;
 
-  // choose the best move
-  let bestMove;
-  if(player === ai){
-    let bestScore = -Infinity;
-    for(const mv of moves){
-      if(mv.score > bestScore){
-        bestScore = mv.score;
-        bestMove = mv;
+      // Afegim fitxa
+      cells[index] = currentPlayer;
+      e.target.textContent = currentPlayer;
+      e.target.classList.add("taken");
+
+      // Guardem el moviment
+      if (currentPlayer === "X") {
+        xMoves.push(index);
+        if (xMoves.length > 3) {
+          // treure la més antiga
+          const oldIndex = xMoves.shift();
+          cells[oldIndex] = "";
+          const oldCell = board.querySelector(`[data-index='${oldIndex}']`);
+          oldCell.textContent = "";
+          oldCell.classList.remove("taken");
+        }
+      } else {
+        oMoves.push(index);
+        if (oMoves.length > 3) {
+          const oldIndex = oMoves.shift();
+          cells[oldIndex] = "";
+          const oldCell = board.querySelector(`[data-index='${oldIndex}']`);
+          oldCell.textContent = "";
+          oldCell.classList.remove("taken");
+        }
       }
-    }
-  } else {
-    let bestScore = Infinity;
-    for(const mv of moves){
-      if(mv.score < bestScore){
-        bestScore = mv.score;
-        bestMove = mv;
+
+      if (checkWinner(currentPlayer)) {
+        statusText.textContent = `🎉 El jugador ${currentPlayer} ha guanyat!`;
+        gameOver = true;
+        return;
       }
+
+      // Canvia de jugador
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      playerText.textContent = currentPlayer;
     }
-  }
-  return bestMove;
-}
 
-/* UI buttons */
-restartBtn.addEventListener('click', () => {
-  newGame(humanStarts);
-  hideModal();
-});
-playAgain.addEventListener('click', () => {
-  newGame(humanStarts);
-  hideModal();
-});
-closeModal.addEventListener('click', hideModal);
+    function checkWinner(player) {
+      const combos = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+      return combos.some(combo => combo.every(i => cells[i] === player));
+    }
 
-// toggle who starts
-whoBtn.addEventListener('click', () => {
-  humanStarts = !humanStarts;
-  updateWhoBtn();
-  newGame(humanStarts);
-});
+    resetBtn.addEventListener("click", () => {
+      cells = Array(9).fill("");
+      xMoves = [];
+      oMoves = [];
+      gameOver = false;
+      currentPlayer = "X";
+      playerText.textContent = currentPlayer;
+      createBoard();
+      statusText.textContent = "Torn del jugador: X";
+    });
 
-function updateWhoBtn(){
-  whoBtn.textContent = humanStarts ? 'Tu comences' : 'IA comença';
-}
-
-// initialize
-buildBoard();
-newGame(true); // human starts by default
-updateWhoBtn();
-
-// close overlay by clicking dim
-document.getElementById('dim').addEventListener('click', hideModal);
-
-// keyboard shortcuts: r = restart, n = new game with role toggle
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'r' || e.key === 'R') newGame(humanStarts);
-  if(e.key === 'n' || e.key === 'N'){ humanStarts = !humanStarts; updateWhoBtn(); newGame(humanStarts); }
-});
-</script>
+    createBoard();
+  </script>
 </body>
 </html>
