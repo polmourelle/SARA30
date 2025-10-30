@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3 en Ratlla - Mode 3 Fitxes</title>
+  <title>3 en Ratlla amb IA (Només 3 Fitxes)</title>
   <style>
     body {
       font-family: 'Roboto Slab', serif;
@@ -20,6 +20,7 @@
     h1 {
       margin-bottom: 1rem;
       text-shadow: 0 0 8px #4caf50;
+      text-align: center;
     }
 
     .board {
@@ -71,7 +72,7 @@
   </style>
 </head>
 <body>
-  <h1>3 en Ratlla (Només 3 fitxes)</h1>
+  <h1>3 en Ratlla (Només 3 Fitxes, amb IA 🤖)</h1>
   <div class="board" id="board"></div>
   <div id="status">Torn del jugador: <span id="player">X</span></div>
   <button id="resetBtn">Reinicia</button>
@@ -94,58 +95,96 @@
         const cell = document.createElement("div");
         cell.classList.add("cell");
         cell.dataset.index = i;
-        cell.addEventListener("click", handleClick);
+        cell.addEventListener("click", handlePlayerMove);
         board.appendChild(cell);
       });
     }
 
-    function handleClick(e) {
+    function handlePlayerMove(e) {
       const index = e.target.dataset.index;
-      if (gameOver || cells[index] !== "") return;
+      if (gameOver || currentPlayer !== "X" || cells[index] !== "") return;
 
-      // Afegim fitxa
-      cells[index] = currentPlayer;
-      e.target.textContent = currentPlayer;
-      e.target.classList.add("taken");
-
-      // Guardem el moviment
-      if (currentPlayer === "X") {
-        xMoves.push(index);
-        if (xMoves.length > 3) {
-          // treure la més antiga
-          const oldIndex = xMoves.shift();
-          cells[oldIndex] = "";
-          const oldCell = board.querySelector(`[data-index='${oldIndex}']`);
-          oldCell.textContent = "";
-          oldCell.classList.remove("taken");
-        }
-      } else {
-        oMoves.push(index);
-        if (oMoves.length > 3) {
-          const oldIndex = oMoves.shift();
-          cells[oldIndex] = "";
-          const oldCell = board.querySelector(`[data-index='${oldIndex}']`);
-          oldCell.textContent = "";
-          oldCell.classList.remove("taken");
-        }
-      }
-
-      if (checkWinner(currentPlayer)) {
-        statusText.textContent = `🎉 El jugador ${currentPlayer} ha guanyat!`;
+      makeMove(index, "X");
+      if (checkWinner("X")) {
+        statusText.textContent = `🎉 Has guanyat!`;
         gameOver = true;
         return;
       }
 
-      // Canvia de jugador
-      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      currentPlayer = "O";
       playerText.textContent = currentPlayer;
+
+      setTimeout(aiMove, 600);
+    }
+
+    function makeMove(index, player) {
+      cells[index] = player;
+      const cell = board.querySelector(`[data-index='${index}']`);
+      cell.textContent = player;
+      cell.classList.add("taken");
+
+      if (player === "X") {
+        xMoves.push(index);
+        if (xMoves.length > 3) removeOldestMove("X");
+      } else {
+        oMoves.push(index);
+        if (oMoves.length > 3) removeOldestMove("O");
+      }
+    }
+
+    function removeOldestMove(player) {
+      const moves = player === "X" ? xMoves : oMoves;
+      const oldIndex = moves.shift();
+      cells[oldIndex] = "";
+      const oldCell = board.querySelector(`[data-index='${oldIndex}']`);
+      oldCell.textContent = "";
+      oldCell.classList.remove("taken");
+    }
+
+    function aiMove() {
+      if (gameOver) return;
+
+      // Lògica senzilla: busca per guanyar, sinó bloqueja, sinó aleatòria
+      const emptyIndexes = cells.map((v, i) => (v === "" ? i : null)).filter(v => v !== null);
+
+      let move = findWinningMove("O") || findWinningMove("X") || randomChoice(emptyIndexes);
+      makeMove(move, "O");
+
+      if (checkWinner("O")) {
+        statusText.textContent = `😎 La IA ha guanyat!`;
+        gameOver = true;
+        return;
+      }
+
+      currentPlayer = "X";
+      playerText.textContent = currentPlayer;
+    }
+
+    function findWinningMove(player) {
+      const combos = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      for (let combo of combos) {
+        const [a,b,c] = combo;
+        const vals = [cells[a], cells[b], cells[c]];
+        if (vals.filter(v => v === player).length === 2 && vals.includes("")) {
+          return combo[vals.indexOf("")];
+        }
+      }
+      return null;
+    }
+
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
     }
 
     function checkWinner(player) {
       const combos = [
-        [0,1,2], [3,4,5], [6,7,8],
-        [0,3,6], [1,4,7], [2,5,8],
-        [0,4,8], [2,4,6]
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
       ];
       return combos.some(combo => combo.every(i => cells[i] === player));
     }
