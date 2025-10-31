@@ -133,7 +133,7 @@
     }
 
     function removeOldestMove(player) {
-      const moves = player === "X" ? xMoves : oMoves;
+      const moves = player === "S" ? xMoves : oMoves;
       const oldIndex = moves.shift();
       cells[oldIndex] = "";
       const oldCell = board.querySelector(`[data-index='${oldIndex}']`);
