@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3 en Ratlla amb IA (Només 3 Fitxes)</title>
+  <title>La prova definitiva</title>
   <style>
     body {
       font-family: 'Roboto Slab', serif;
@@ -72,9 +72,9 @@
   </style>
 </head>
 <body>
-  <h1>3 en Ratlla (Només 3 Fitxes, amb IA 🤖)</h1>
+  <h1>La prova definitiva</h1>
   <div class="board" id="board"></div>
-  <div id="status">Torn del jugador: <span id="player">X</span></div>
+  <div id="status">Torn del jugador: <span id="player">S</span></div>
   <button id="resetBtn">Reinicia</button>
 
   <script>
@@ -84,7 +84,7 @@
     const resetBtn = document.getElementById("resetBtn");
 
     let cells = Array(9).fill("");
-    let currentPlayer = "X";
+    let currentPlayer = "S";
     let xMoves = [];
     let oMoves = [];
     let gameOver = false;
@@ -95,23 +95,23 @@
         const cell = document.createElement("div");
         cell.classList.add("cell");
         cell.dataset.index = i;
-        cell.addEventListener("click", handlePlayerMove);
+        cell.addEventListener("click", handleMove);
         board.appendChild(cell);
       });
     }
 
-    function handlePlayerMove(e) {
+    function handleMove(e) {
       const index = e.target.dataset.index;
-      if (gameOver || currentPlayer !== "X" || cells[index] !== "") return;
+      if (gameOver || currentPlayer !== "S" || cells[index] !== "") return;
 
-      makeMove(index, "X");
-      if (checkWinner("X")) {
-        statusText.textContent = `🎉 Has guanyat!`;
+      makeMove(index, "S");
+      if (checkWinner("S")) {
+        statusText.textContent = `🎉 Has guanyat! Ves a /premi.html`;
         gameOver = true;
         return;
       }
 
-      currentPlayer = "O";
+      currentPlayer = "P";
       playerText.textContent = currentPlayer;
 
       setTimeout(aiMove, 600);
@@ -123,12 +123,12 @@
       cell.textContent = player;
       cell.classList.add("taken");
 
-      if (player === "X") {
+      if (player === "S") {
         xMoves.push(index);
-        if (xMoves.length > 3) removeOldestMove("X");
+        if (xMoves.length > 3) removeOldestMove("S");
       } else {
         oMoves.push(index);
-        if (oMoves.length > 3) removeOldestMove("O");
+        if (oMoves.length > 3) removeOldestMove("P");
       }
     }
 
@@ -147,16 +147,16 @@
       // Lògica senzilla: busca per guanyar, sinó bloqueja, sinó aleatòria
       const emptyIndexes = cells.map((v, i) => (v === "" ? i : null)).filter(v => v !== null);
 
-      let move = findWinningMove("O") || findWinningMove("X") || randomChoice(emptyIndexes);
-      makeMove(move, "O");
+      let move = findWinningMove("P") || findWinningMove("S") || randomChoice(emptyIndexes);
+      makeMove(move, "P");
 
-      if (checkWinner("O")) {
-        statusText.textContent = `😎 La IA ha guanyat!`;
+      if (checkWinner("P")) {
+        statusText.textContent = `Has perdut...`;
         gameOver = true;
         return;
       }
 
-      currentPlayer = "X";
+      currentPlayer = "S";
       playerText.textContent = currentPlayer;
     }
 
@@ -194,10 +194,10 @@
       xMoves = [];
       oMoves = [];
       gameOver = false;
-      currentPlayer = "X";
+      currentPlayer = "S";
       playerText.textContent = currentPlayer;
       createBoard();
-      statusText.textContent = "Torn del jugador: X";
+      statusText.textContent = "Torn del jugador: S";
     });
 
     createBoard();
