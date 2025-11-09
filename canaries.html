@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
@@ -13,19 +13,26 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      background: url('imatges/canaries.jpg') no-repeat center center fixed;
-      background-size: cover;
+      background-color: #87CEFA; /* blau cel */
     }
 
-       .box {
-      background-color: #90ee90; /* verd clar */
-      border: 3px solid black;  /* contorn negre */
-      color: black;              /* text negre */
+    img.canaries {
+      max-width: 90vw;
+      max-height: 70vh;
+      object-fit: contain;
+      margin-top: 2rem;
+      border-radius: 10px;
+    }
+
+    .box {
+      background-color: #90ee90;
+      border: 3px solid black;
+      color: black;
       font-size: 2rem;
       font-weight: bold;
       text-align: center;
       padding: 3rem;
-      margin-top: 3rem;
+      margin-top: 2rem;
       width: 60%;
       max-width: 600px;
       border-radius: 12px;
@@ -43,8 +50,8 @@
                    1px -1px 2px black, -1px 1px 2px black;
       z-index: 3000;
     }
+
     .back-button {
-      display: inline-block;
       margin: 2rem auto;
       padding: 1rem 2rem;
       background: #4CAF50;
@@ -60,30 +67,21 @@
     }
     .back-button:hover {
       background: #45a049;
-    }    
+    }
   </style>
 </head>
 <body>
-  <div class="box">
 
-  <p><em>Illes Canàries, 28 de març de 2026</em></p>
-</div>
+  <!-- Imatge centrada -->
+  <img src="imatges/canaries.jpg" class="canaries">
+
+  <div class="box">
+    <p>Què et semblaria si et dic...? </p>
+    <p><em>Illes Canàries, 28 de març de 2026</em></p>
+  </div>
 
   <div class="signature">by Polet</div>
 
-<style>
-  .signature {
-    position: fixed;
-    bottom: 10px;
-    right: 15px;
-    font-size: 1rem;
-    font-style: italic;
-    color: white;
-    text-shadow: 1px 1px 2px black, -1px -1px 2px black,
-                 1px -1px 2px black, -1px 1px 2px black;
-    z-index: 3000;
-  }
-</style>
-    <a href="regals.html" class="back-button">Enrere</a>
+  <a href="regals.html" class="back-button">Enrere</a>
 </body>
 </html>
